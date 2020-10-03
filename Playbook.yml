@@ -1,0 +1,5 @@
+- name: jenkins in docker
+  hosts: all
+  become: yes
+  roles:
+    - rolenginx.nginx
