@@ -1,0 +1,22 @@
+---
+  - name: installing nginx
+    package: name=nginx  state=latest
+  - name: starting nginx
+    service: name=nginx state=started enabled=yes
+  - name: changing nginx.conf 
+    template:
+      src: myconf.j2
+      dest: /etc/nginx/conf.d/myconf.conf
+      mode: 774
+  - name: removing default
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+  - name: checking nginx configs & running nginx
+    shell: "nginx -t"
+    register: nginx_conf_status
+    notify:
+      - restarting nginx
+  - name: show config status
+    debug:
+      msg: " {{ nginx_conf_status }}"
